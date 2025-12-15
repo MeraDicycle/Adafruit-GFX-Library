@@ -136,61 +136,31 @@ void Adafruit_GFX::writePixel(int16_t x, int16_t y, uint16_t color){
     drawPixel(x, y, color);
 }
 
-// zjw分支 做的椭圆
-void Adafruit_GFX::drawEllipse(int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color) {
-  int32_t x = 0;
-  int32_t y = ry;
-
-  int32_t rx2 = (int32_t)rx * rx;
-  int32_t ry2 = (int32_t)ry * ry;
-  int32_t two_rx2 = 2 * rx2;
-  int32_t two_ry2 = 2 * ry2;
-
-  int32_t px = 0;
-  int32_t py = two_rx2 * y;
-
-  // Region 1
-  int32_t p = ry2 - rx2 * ry + rx2 / 4;
-
-  while (px < py) {
-    writePixel(x0 + x, y0 + y, color);
-    writePixel(x0 - x, y0 + y, color);
-    writePixel(x0 + x, y0 - y, color);
-    writePixel(x0 - x, y0 - y, color);
-
-    x++;
-    px += two_ry2;
-
-    if (p < 0) {
-      p += ry2 + px;
+// qdz 做的爱心
+//爱心
+void Adafruit_GFX::drawHeart(int16_t x0, int16_t y0,
+                             int16_t size, uint16_t color) {
+  int16_t prevX = 0, prevY = 0;
+  bool first = true;
+  for (int i = 0; i <= 360; i += 5) {   // 角度步进，越小越平滑
+    float t = i * PI / 180.0;
+    float fx = 16 * pow(sin(t), 3);
+    float fy = 13 * cos(t)
+             - 5 * cos(2 * t)
+             - 2 * cos(3 * t)
+             - cos(4 * t);
+    int16_t x = x0 + fx * size / 16;
+    int16_t y = y0 - fy * size / 16;
+    if (!first) {
+      drawLine(prevX, prevY, x, y, color);
     } else {
-      y--;
-      py -= two_rx2;
-      p += ry2 + px - py;
+      first = false;
     }
-  }
-
-  // Region 2
-  p = ry2 * (x * x + x) + rx2 * (y * y - 2 * y + 1) - rx2 * ry2;
-
-  while (y >= 0) {
-    writePixel(x0 + x, y0 + y, color);
-    writePixel(x0 - x, y0 + y, color);
-    writePixel(x0 + x, y0 - y, color);
-    writePixel(x0 - x, y0 - y, color);
-
-    y--;
-    py -= two_rx2;
-
-    if (p > 0) {
-      p += rx2 - py;
-    } else {
-      x++;
-      px += two_ry2;
-      p += rx2 - py + px;
-    }
+    prevX = x;
+    prevY = y;
   }
 }
+
 
 
 // (x,y) is topmost point; if unsure, calling function

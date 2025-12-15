@@ -58,9 +58,9 @@ class Adafruit_GFX : public Print {
 	  drawPentagram(int16_t x0, int16_t y0, int16_t r0, uint16_t color),
 
 
-    // zjw分支画椭圆：
-    //  Draw drawEllipse
-    drawEllipse(int16_t x0, int16_t y0, int16_t rx, int16_t ry,uint16_t color),
+    // qdz分支画椭圆：
+    //  Draw heart
+    drawHeart(int16_t x0, int16_t y0, int16_t size, uint16_t color),
 
     drawTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
       int16_t x2, int16_t y2, uint16_t color),
